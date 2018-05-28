@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>折线图</title>
+    <style>
+	html,body { height:100%; width:100%; margin:0; padding:0;align:left;valign:left;}
+	</style>
+    <!--Step:1 Import a module loader, such as esl.js or require.js-->
+    <!--Step:1 引入一个模块加载器，如esl.js或者require.js-->
+    <script src="js/esl.js"></script>
+</head>
+
+<body>
+    <!--Step:2 Prepare a dom for ECharts which (must) has size (width & hight)-->
+    <!--Step:2 为ECharts准备一个具备大小（宽高）的Dom-->
+    <div id="main" style="height:250px;width:800px;border:0px;text-align:left;align:left;valign:left;"></div>
+    
+    <script type="text/javascript">
+    // Step:3 conifg ECharts's path, link to echarts.js from current page.
+    // Step:3 为模块加载器配置echarts的路径，从当前页面链接到echarts.js，定义所需图表路径
+    require.config({
+        paths:{ 
+            echarts:'./js/echarts',
+            'echarts/chart/line': './js/echarts'
+        }
+    });
+    
+    // Step:4 require echarts and use it in the callback.
+    // Step:4 动态加载echarts然后在回调函数中开始使用，注意保持按需加载结构定义图表路径
+    var myChart;
+   
+    //对外开放的调用刷新数据接口
+    function refershView(dayArrays,flowUseArrays)
+    {
+    	var option = {
+        		tooltip : {
+                    trigger: 'axis',
+                    backgroundColor:'rgba(255,255,255,0.7)',
+                    textStyle:{color:'#6D6D6C'},
+                    borderColor:'rgba(240,240,240,1)',
+                    borderWidth:1,
+                    axisPointer:{
+                    	type : 'line',
+                    	lineStyle : {
+                    	  color: '#54C1E8',
+                    	  width: 2,
+                    	  type: 'solid'
+                    	}
+                    },
+                    formatter: function(a, b, c) {
+                    	var index = b.substring(5,b.length);
+                       return dayArrays[index]+"<br/>日使用:<font color='red' size='large'>"+flowUseArrays[index]+"</font>M";
+                    },
+                },
+                toolbox: {
+                    show : false,
+                    feature : {
+                        mark : false,
+                        dataView : {readOnly: true},               
+                        restore : false,
+                        saveAsImage : false
+                    }
+                },
+                calculable : false,
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : true,
+                        scale:true,
+                        data : function(){
+                            var list = [];
+                            for (var i = 1; i <= dayArrays.length; i++) {
+                                list.push(i<10?('0'+i):(i+''));
+                            }
+                            return list;
+                        }()
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'日使用',
+                        type:'line',
+                        smooth:true,
+                        itemStyle: {normal: {color:'#54C1E8',areaStyle: {color: 'rgba(227, 238, 244, 0.5)'}},emphasis:{color:'#FF3259'}},
+                        data:flowUseArrays
+                    }
+                ] 
+        };
+    	
+    	require(
+    	        [
+    	            'echarts',
+    	            'echarts/chart/line'
+    	        ],
+    	        function(ec) {
+    	            //--- 折柱 ---
+    	            myChart = ec.init(document.getElementById('main'));
+    	            myChart.setOption(option,true);
+    	        }
+    	    );
+    }
+    </script>
+</body>
+</html>
