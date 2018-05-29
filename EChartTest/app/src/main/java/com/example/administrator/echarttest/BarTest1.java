@@ -24,8 +24,6 @@
 
 package com.example.administrator.echarttest;
 
-import android.webkit.WebView;
-
 import com.github.abel533.echarts.axis.CategoryAxis;
 import com.github.abel533.echarts.axis.ValueAxis;
 import com.github.abel533.echarts.code.Magic;
@@ -46,7 +44,7 @@ import java.util.List;
 public class BarTest1 {
 
 
-    public void test(WebView webView) {
+    public void test() {
         //地址：http://echarts.baidu.com/doc/example/bar1.html
         EnhancedOption option = new EnhancedOption();
         option.title().text("某地区蒸发量和降水量").subtext("纯属虚构");

@@ -33,6 +33,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         BarTest1 barTest1=new BarTest1();
-        barTest1.test(webView);
+        barTest1.test();
     }
 }
